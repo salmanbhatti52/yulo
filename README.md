@@ -1,4 +1,4 @@
-# leuke_app_mvc
+# YULO
 
 A new Flutter application.
 
