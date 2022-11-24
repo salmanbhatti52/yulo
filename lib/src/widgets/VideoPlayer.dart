@@ -23,8 +23,8 @@ class VideoPlayerWidget extends StatefulWidget {
 class VideoPlayerWidgetState extends StateMVC<VideoPlayerWidget> with TickerProviderStateMixin {
   int chkVideo = 0;
   late VoidCallback listener;
-  GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   late AnimationController _animationController;
+  GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   bool showAnim = false;
   @override
   void initState() {
@@ -125,6 +125,7 @@ class VideoPlayerWidgetState extends StateMVC<VideoPlayerWidget> with TickerProv
                         widget.videoController!.play();
                       }
                     });
+                    print("showAnim $showAnim");
                   },
                   child: AnimatedOpacity(
                     opacity: snapshot.connectionState == ConnectionState.done ? 1.0 : 0.0,
@@ -147,6 +148,7 @@ class VideoPlayerWidgetState extends StateMVC<VideoPlayerWidget> with TickerProv
                                   child: SizedBox.expand(
                                     child: FittedBox(
                                       fit: widget.videoController!.value.size.height > widget.videoController!.value.size.width ? BoxFit.fitHeight : BoxFit.fitWidth,
+                                      // fit: BoxFit.fitWidth,
                                       child: SizedBox(
                                         width: widget.videoController!.value.size.width,
                                         height: widget.videoController!.value.size.height,
@@ -219,56 +221,71 @@ class VideoPlayerWidgetState extends StateMVC<VideoPlayerWidget> with TickerProv
                     ),
                   ),
                 ),
-                AnimatedOpacity(
-                  opacity: snapshot.connectionState != ConnectionState.done ? 1.0 : 0.0,
-                  duration: const Duration(milliseconds: 250),
-                  // The green box must be a child of the AnimatedOpacity widget.
-                  child: Stack(
-                    children: [
-                      Center(
-                        child: Container(
-                          constraints: BoxConstraints(
-                            maxHeight: MediaQuery.of(context).size.height,
-                            maxWidth: MediaQuery.of(context).size.width,
-                          ),
-                          child: SizedBox.expand(
-                            child: Container(
-                              height: MediaQuery.of(context).size.height,
-                              width: MediaQuery.of(context).size.width,
-                              decoration: BoxDecoration(
-                                color: Colors.black,
-                                image: DecorationImage(
-                                  image: CachedNetworkImageProvider(
-                                    widget.videoObj.videoThumbnail,
-                                    cacheManager: CustomCacheManager.instance,
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      showAnim = true;
+                      videoRepo.homeCon.value.onTap = true;
+                      if (widget.videoController!.value.isPlaying) {
+                        _animationController.reverse();
+                        widget.videoController!.pause();
+                      } else {
+                        _animationController.forward();
+                        widget.videoController!.play();
+                      }
+                    });
+                  },
+                  child: AnimatedOpacity(
+                    opacity: snapshot.connectionState != ConnectionState.done ? 1.0 : 0.0,
+                    duration: const Duration(milliseconds: 250),
+                    // The green box must be a child of the AnimatedOpacity widget.
+                    child: Stack(
+                      children: [
+                        Center(
+                          child: Container(
+                            constraints: BoxConstraints(
+                              maxHeight: MediaQuery.of(context).size.height,
+                              maxWidth: MediaQuery.of(context).size.width,
+                            ),
+                            child: SizedBox.expand(
+                              child: Container(
+                                height: MediaQuery.of(context).size.height,
+                                width: MediaQuery.of(context).size.width,
+                                decoration: BoxDecoration(
+                                  color: Colors.black,
+                                  image: DecorationImage(
+                                    image: CachedNetworkImageProvider(
+                                      widget.videoObj.videoThumbnail,
+                                      cacheManager: CustomCacheManager.instance,
+                                    ),
+                                    fit: widget.videoObj.isWide ? BoxFit.fitWidth : BoxFit.fitHeight,
                                   ),
-                                  fit: widget.videoObj.isWide ? BoxFit.fitWidth : BoxFit.fitHeight,
                                 ),
+                                child: Helper.showLoaderSpinner(Colors.transparent),
                               ),
-                              child: Helper.showLoaderSpinner(Colors.transparent),
                             ),
                           ),
                         ),
-                      ),
-                      Positioned(
-                        bottom: 0,
-                        child: Container(
-                          height: config.App(scaffoldKey.currentContext).appHeight(40),
-                          width: config.App(scaffoldKey.currentContext).appWidth(100),
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              begin: Alignment.bottomCenter,
-                              end: Alignment.topCenter,
-                              colors: [
-                                Colors.black38,
-                                Colors.black26,
-                                Colors.transparent,
-                              ],
+                        Positioned(
+                          bottom: 0,
+                          child: Container(
+                            height: config.App(scaffoldKey.currentContext).appHeight(40),
+                            width: config.App(scaffoldKey.currentContext).appWidth(100),
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.bottomCenter,
+                                end: Alignment.topCenter,
+                                colors: [
+                                  Colors.black38,
+                                  Colors.black26,
+                                  Colors.transparent,
+                                ],
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 )
               ],

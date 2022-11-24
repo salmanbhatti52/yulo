@@ -179,7 +179,7 @@ class _VideoSubmitState extends StateMVC<VideoSubmit> with SingleTickerProviderS
                                     widget.thumbPath,
                                   ),
                                 )
-                              : AssetImage("assets/images/splash.png") as ImageProvider,
+                              : AssetImage("assets/images/video-logo.png") as ImageProvider,
                           fit: fitHeight == true ? BoxFit.fitHeight : BoxFit.fitWidth,
                         ),
                       ),
@@ -292,8 +292,16 @@ class _VideoSubmitState extends StateMVC<VideoSubmit> with SingleTickerProviderS
                                           });
                                         },
                                         child: Container(
-                                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(4), color: _con.privacy == 0 ? settingRepo.setting.value.accentColor : settingRepo.setting.value.iconColor),
-                                          child: "Public".text.size(13).color(_con.privacy == 0 ? settingRepo.setting.value.textColor! : settingRepo.setting.value.bgColor!).center.make().centered().pSymmetric(h: 15, v: 8),
+                                          decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(4), color: _con.privacy == 0 ? settingRepo.setting.value.accentColor : settingRepo.setting.value.iconColor),
+                                          child: "Public"
+                                              .text
+                                              .size(13)
+                                              .color(_con.privacy == 0 ? settingRepo.setting.value.textColor! : settingRepo.setting.value.bgColor!)
+                                              .center
+                                              .make()
+                                              .centered()
+                                              .pSymmetric(h: 15, v: 8),
                                         ),
                                       ),
                                       SizedBox(
@@ -306,8 +314,16 @@ class _VideoSubmitState extends StateMVC<VideoSubmit> with SingleTickerProviderS
                                           });
                                         },
                                         child: Container(
-                                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(4), color: _con.privacy == 1 ? settingRepo.setting.value.accentColor : settingRepo.setting.value.iconColor),
-                                          child: "Private".text.size(13).color(_con.privacy == 1 ? settingRepo.setting.value.textColor! : settingRepo.setting.value.bgColor!).center.make().centered().pSymmetric(h: 15, v: 8),
+                                          decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(4), color: _con.privacy == 1 ? settingRepo.setting.value.accentColor : settingRepo.setting.value.iconColor),
+                                          child: "Private"
+                                              .text
+                                              .size(13)
+                                              .color(_con.privacy == 1 ? settingRepo.setting.value.textColor! : settingRepo.setting.value.bgColor!)
+                                              .center
+                                              .make()
+                                              .centered()
+                                              .pSymmetric(h: 15, v: 8),
                                         ),
                                       ),
                                       SizedBox(
@@ -320,8 +336,16 @@ class _VideoSubmitState extends StateMVC<VideoSubmit> with SingleTickerProviderS
                                           });
                                         },
                                         child: Container(
-                                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(4), color: _con.privacy == 2 ? settingRepo.setting.value.accentColor : settingRepo.setting.value.iconColor),
-                                          child: "Followers".text.size(13).color(_con.privacy == 2 ? settingRepo.setting.value.textColor! : settingRepo.setting.value.bgColor!).center.make().centered().pSymmetric(h: 15, v: 8),
+                                          decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(4), color: _con.privacy == 2 ? settingRepo.setting.value.accentColor : settingRepo.setting.value.iconColor),
+                                          child: "Followers"
+                                              .text
+                                              .size(13)
+                                              .color(_con.privacy == 2 ? settingRepo.setting.value.textColor! : settingRepo.setting.value.bgColor!)
+                                              .center
+                                              .make()
+                                              .centered()
+                                              .pSymmetric(h: 15, v: 8),
                                         ),
                                       ),
                                     ],
@@ -444,7 +468,7 @@ class _VideoSubmitState extends StateMVC<VideoSubmit> with SingleTickerProviderS
                                     widget.thumbPath,
                                   ),
                                 )
-                              : AssetImage("assets/images/splash.png") as ImageProvider,
+                              : AssetImage("assets/images/video-logo.png") as ImageProvider,
                           fit: fitHeight == true ? BoxFit.fitHeight : BoxFit.fitWidth,
                         ),
                         color: Colors.black26,

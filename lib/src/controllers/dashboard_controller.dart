@@ -74,8 +74,8 @@ class DashboardController extends ControllerMVC {
   bool isLiked = false;
   bool videoInitialized = false;
   Map<String, VideoPlayerController?> videoControllers = {};
-  Map<String, VideoPlayerController?> videoControllers2 = {};
   Map<String, Future<void>> initializeVideoPlayerFutures = {};
+  Map<String, VideoPlayerController?> videoControllers2 = {};
   Map<String, Future<void>> initializeVideoPlayerFutures2 = {};
   Map<int, VoidCallback> listeners = {};
   int index = 0;
@@ -660,7 +660,9 @@ class DashboardController extends ControllerMVC {
   Future<void> likeVideo(int index) async {
     likeShowLoader.value = true;
     likeShowLoader.notifyListeners();
-    videoRepo.videosData.value.videos.elementAt(index).totalLikes = (!videoRepo.videosData.value.videos.elementAt(index).isLike) ? videoRepo.videosData.value.videos.elementAt(index).totalLikes + 1 : videoRepo.videosData.value.videos.elementAt(index).totalLikes - 1;
+    videoRepo.videosData.value.videos.elementAt(index).totalLikes = (!videoRepo.videosData.value.videos.elementAt(index).isLike)
+        ? videoRepo.videosData.value.videos.elementAt(index).totalLikes + 1
+        : videoRepo.videosData.value.videos.elementAt(index).totalLikes - 1;
     videoRepo.videosData.value.videos.elementAt(index).isLike = (videoRepo.videosData.value.videos.elementAt(index).isLike) ? false : true;
     print("videoRepo.videosData.value.videos.elementAt(index).videoId ${videoRepo.videosData.value.videos.elementAt(index).videoId}");
     videoRepo.updateLike(videoRepo.videosData.value.videos.elementAt(index).videoId).whenComplete(() {
@@ -675,8 +677,9 @@ class DashboardController extends ControllerMVC {
   Future<void> likeFollowingVideo(int index) async {
     likeShowLoader.value = true;
     likeShowLoader.notifyListeners();
-    videoRepo.followingUsersVideoData.value.videos.elementAt(index).totalLikes =
-        (!videoRepo.videosData.value.videos.elementAt(index).isLike) ? videoRepo.followingUsersVideoData.value.videos.elementAt(index).totalLikes + 1 : videoRepo.followingUsersVideoData.value.videos.elementAt(index).totalLikes - 1;
+    videoRepo.followingUsersVideoData.value.videos.elementAt(index).totalLikes = (!videoRepo.videosData.value.videos.elementAt(index).isLike)
+        ? videoRepo.followingUsersVideoData.value.videos.elementAt(index).totalLikes + 1
+        : videoRepo.followingUsersVideoData.value.videos.elementAt(index).totalLikes - 1;
     videoRepo.followingUsersVideoData.value.videos.elementAt(index).isLike = (videoRepo.videosData.value.videos.elementAt(index).isLike) ? false : true;
     print("videoRepo.followingUsersVideoData.value.videos.elementAt(index).videoId ${videoRepo.followingUsersVideoData.value.videos.elementAt(index).videoId}");
     videoRepo.updateLike(videoRepo.followingUsersVideoData.value.videos.elementAt(index).videoId).whenComplete(() {

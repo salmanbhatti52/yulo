@@ -292,9 +292,14 @@ class _EditVideoState extends StateMVC<EditVideo> with SingleTickerProviderState
                                 children: [
                                   Expanded(
                                     flex: 2,
-                                    child: FlatButton(
-                                      color: Colors.transparent,
-                                      padding: EdgeInsets.all(10),
+                                    child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.transparent,
+                                        padding: EdgeInsets.all(10),
+                                        // shape: RoundedRectangleBorder(
+                                        //   borderRadius: BorderRadius.circular(100.0),
+                                        // ),
+                                      ),
                                       child: Container(
                                         height: 45,
                                         width: 200,
@@ -321,9 +326,14 @@ class _EditVideoState extends StateMVC<EditVideo> with SingleTickerProviderState
                                   ),
                                   Expanded(
                                     flex: 2,
-                                    child: FlatButton(
-                                      color: Colors.transparent,
-                                      padding: EdgeInsets.all(10),
+                                    child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.transparent,
+                                        padding: EdgeInsets.all(10),
+                                        // shape: RoundedRectangleBorder(
+                                        //   borderRadius: BorderRadius.circular(100.0),
+                                        // ),
+                                      ),
                                       child: Container(
                                         height: 45,
                                         width: 200,
@@ -366,7 +376,7 @@ class _EditVideoState extends StateMVC<EditVideo> with SingleTickerProviderState
                                             _con.privacy,
                                           );
                                         } else {
-                                          Scaffold.of(context).showSnackBar(
+                                          ScaffoldMessenger.of(context).showSnackBar(
                                             SnackBar(
                                               backgroundColor: Colors.redAccent,
                                               behavior: SnackBarBehavior.floating,

@@ -192,8 +192,11 @@ class _ChatViewState extends StateMVC<ChatView> {
                                                 elements: _chat.chatMessages,
                                                 controller: _con.chatScrollController,
                                                 groupBy: (ChatMessage element) => element.sentDate,
-                                                itemComparator: (item1, item2) => (DateFormat("yyyy-MM-dd HH:mm:ss").parse(item2.sentDatetime)).millisecondsSinceEpoch.compareTo((DateFormat("yyyy-MM-dd HH:mm:ss").parse(item1.sentDatetime)).millisecondsSinceEpoch),
-                                                groupComparator: (item1, item2) => (DateFormat('dd MMM yyyy').parse(item2)).millisecondsSinceEpoch.compareTo((DateFormat('dd MMM yyyy').parse(item1)).millisecondsSinceEpoch),
+                                                itemComparator: (item1, item2) => (DateFormat("yyyy-MM-dd HH:mm:ss").parse(item2.sentDatetime))
+                                                    .millisecondsSinceEpoch
+                                                    .compareTo((DateFormat("yyyy-MM-dd HH:mm:ss").parse(item1.sentDatetime)).millisecondsSinceEpoch),
+                                                groupComparator: (item1, item2) =>
+                                                    (DateFormat('dd MMM yyyy').parse(item2)).millisecondsSinceEpoch.compareTo((DateFormat('dd MMM yyyy').parse(item1)).millisecondsSinceEpoch),
                                                 useStickyGroupSeparators: true, // optional
                                                 floatingHeader: true, // optional
                                                 order: GroupedListOrder.DESC, // optional
@@ -294,7 +297,9 @@ class _ChatViewState extends StateMVC<ChatView> {
                                                                         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                                                                         margin: EdgeInsets.symmetric(horizontal: 2, vertical: 5),
                                                                         decoration: BoxDecoration(
-                                                                          color: message.userId == currentUser.value.userId ? settingRepo.setting.value.accentColor : settingRepo.setting.value.bgShade,
+                                                                          color: message.userId == currentUser.value.userId
+                                                                              ? settingRepo.setting.value.myMsgColor
+                                                                              : settingRepo.setting.value.senderMsgColor,
                                                                           borderRadius: BorderRadius.only(
                                                                             topRight: Radius.circular(15.0),
                                                                             bottomRight: Radius.circular(message.userId == currentUser.value.userId ? 0 : 15.0),
@@ -302,12 +307,19 @@ class _ChatViewState extends StateMVC<ChatView> {
                                                                             topLeft: Radius.circular(15.0),
                                                                           ),
                                                                         ),
-                                                                        child: message.msg.selectableText.textStyle(TextStyle(fontSize: 14, color: settingRepo.setting.value.textColor!)).make(),
+                                                                        child: message.msg.selectableText
+                                                                            .textStyle(TextStyle(
+                                                                                fontSize: 14,
+                                                                                color: message.userId == currentUser.value.userId
+                                                                                    ? settingRepo.setting.value.myMsgTextColor
+                                                                                    : settingRepo.setting.value.senderMsgTextColor))
+                                                                            .make(),
                                                                       ),
                                                                     ),
                                                                     Padding(
                                                                       padding: EdgeInsets.fromLTRB(4, 2, 0, 3),
-                                                                      child: message.sentOn.text.textStyle(TextStyle(fontSize: 10, color: settingRepo.setting.value.textColor!.withOpacity(0.6))).make(),
+                                                                      child:
+                                                                          message.sentOn.text.textStyle(TextStyle(fontSize: 10, color: settingRepo.setting.value.textColor!.withOpacity(0.6))).make(),
                                                                     )
                                                                   ],
                                                                 ),

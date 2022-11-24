@@ -1,0 +1,6 @@
+{
+  "app_name": "Yulo",
+  "base_url": "https://yulo.eigix.net/public/",
+  "pusher_key": "d8d9d0bdabe1d97487b1",
+  "pusher_app_cluster": "us2"
+}

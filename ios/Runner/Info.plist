@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CADisableMinimumFrameDurationOnPhone</key>
+	<true/>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>
@@ -11,7 +13,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>Leuke</string>
+	<string>Yulo</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -50,13 +52,15 @@
 	<key>FacebookAppID</key>
 	<string>000000000000</string>
 	<key>FacebookClientToken</key>
-    <string>XXXXXXXXXXXXXXXXXXX</string>
+	<string>XXXXXXXXXXXXXXXXXXX</string>
 	<key>FacebookDisplayName</key>
-	<string>Leuke</string>
+	<string>Yulo</string>
 	<key>GADApplicationIdentifier</key>
 	<string>ca-app-pub-3940256099942544~1458002511</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
+	<key>LSApplicationCategoryType</key>
+	<string></string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>fbapi</string>
@@ -86,11 +90,11 @@
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Allow to access user location, this is not required by the app but required by the Appstore connect review team.</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Leuke App requires the access to your camera's microphone to let you videos to post to your Social Profile</string>
+	<string>Yulo App requires the access to your camera's microphone to let you videos to post to your Social Profile</string>
 	<key>NSMotionUsageDescription</key>
 	<string>Allow to access motion usage information, this is not required by the app but required by the Appstore connect review team.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Leuke App needs to access your camera roll so that you can upload images for your profile picture and upload video to your social media profile. Your images and videos will not be shared without your permission</string>
+	<string>Yulo App needs to access your camera roll so that you can upload images for your profile picture and upload video to your social media profile. Your images and videos will not be shared without your permission</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
 	<string>Allow to use speech recognition, this is not required by the app but required by the Appstore connect review team.</string>
 	<key>SKAdNetworkItems</key>
@@ -135,7 +139,5 @@
 	<array>
 		<string>applinks:example.com</string>
 	</array>
-	<key>CADisableMinimumFrameDurationOnPhone</key>
-	<true/>
 </dict>
 </plist>

@@ -77,6 +77,18 @@ class _DashboardViewState extends StateMVC<DashboardView> with SingleTickerProvi
       });
     }
     videoRepo.homeCon.value.getAds();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final viewInsets = EdgeInsets.fromWindowPadding(WidgetsBinding.instance.window.viewInsets, WidgetsBinding.instance.window.devicePixelRatio);
+      if (viewInsets.bottom == 0.0) {
+        if (videoRepo.homeCon.value.bannerShowOn.indexOf("1") > -1) {
+          videoRepo.homeCon.value.paddingBottom = Platform.isAndroid ? 0 : 80.0;
+        } else {
+          videoRepo.homeCon.value.paddingBottom = 0;
+        }
+      } else {
+        videoRepo.homeCon.value.paddingBottom = 0;
+      }
+    });
     super.initState();
   }
 
@@ -86,13 +98,20 @@ class _DashboardViewState extends StateMVC<DashboardView> with SingleTickerProvi
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state.toString() == "AppLifecycleState.paused" || state.toString() == "AppLifecycleState.inactive" || state.toString() == "AppLifecycleState.detached" || state.toString() == "AppLifecycleState.suspending ") {
+    if (state.toString() == "AppLifecycleState.paused" ||
+        state.toString() == "AppLifecycleState.inactive" ||
+        state.toString() == "AppLifecycleState.detached" ||
+        state.toString() == "AppLifecycleState.suspending ") {
+      videoRepo.homeCon.value.onTap = false;
+      videoRepo.homeCon.notifyListeners();
       if (!videoRepo.homeCon.value.showFollowingPage.value) {
         videoRepo.homeCon.value.stopController(videoRepo.homeCon.value.swiperIndex);
       } else {
         videoRepo.homeCon.value.stopController2(videoRepo.homeCon.value.swiperIndex2);
       }
     } else {
+      videoRepo.homeCon.value.onTap = true;
+      videoRepo.homeCon.notifyListeners();
       if (!videoRepo.homeCon.value.showFollowingPage.value) {
         videoRepo.homeCon.value.playController(videoRepo.homeCon.value.swiperIndex);
       } else {
@@ -344,7 +363,7 @@ class _DashboardViewState extends StateMVC<DashboardView> with SingleTickerProvi
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(statusBarColor: settingRepo.setting.value.bgColor, statusBarIconBrightness: Brightness.light),
     );
-    final viewInsets = EdgeInsets.fromWindowPadding(WidgetsBinding.instance.window.viewInsets, WidgetsBinding.instance.window.devicePixelRatio);
+    /*final viewInsets = EdgeInsets.fromWindowPadding(WidgetsBinding.instance.window.viewInsets, WidgetsBinding.instance.window.devicePixelRatio);
     if (viewInsets.bottom == 0.0) {
       if (videoRepo.homeCon.value.bannerShowOn.indexOf("1") > -1) {
         videoRepo.homeCon.value.paddingBottom = Platform.isAndroid ? 0 : 80.0;
@@ -353,7 +372,7 @@ class _DashboardViewState extends StateMVC<DashboardView> with SingleTickerProvi
       }
     } else {
       videoRepo.homeCon.value.paddingBottom = 0;
-    }
+    }*/
     return WillPopScope(
       onWillPop: () {
         DateTime now = DateTime.now();
@@ -451,8 +470,8 @@ class _DashboardViewState extends StateMVC<DashboardView> with SingleTickerProvi
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                     colors: [
-                      settingRepo.setting.value.buttonColor!,
-                      settingRepo.setting.value.buttonColor!,
+                      settingRepo.setting.value.navBgColor!,
+                      settingRepo.setting.value.navBgColor!,
                     ],
                   ),
                   items: [
@@ -1048,7 +1067,9 @@ class _DashboardViewState extends StateMVC<DashboardView> with SingleTickerProvi
                   videoRepo.homeCon.value.textFieldMoveToUp = false;
                 });
                 if (videoRepo.homeCon.value.commentValue.trim() != '' && videoRepo.homeCon.value.commentValue != null) {
-                  editCommentIndex > 0 ? videoRepo.homeCon.value.editComment(videoRepo.homeCon.value.editedComment.value - 1, videoObj!.videoId, context) : videoRepo.homeCon.value.addComment(videoObj!.videoId, context);
+                  editCommentIndex > 0
+                      ? videoRepo.homeCon.value.editComment(videoRepo.homeCon.value.editedComment.value - 1, videoObj!.videoId, context)
+                      : videoRepo.homeCon.value.addComment(videoObj!.videoId, context);
                 }
               },
               child: Padding(
@@ -1352,7 +1373,8 @@ class _DashboardViewState extends StateMVC<DashboardView> with SingleTickerProvi
                                                                           ],
                                                                         ),
                                                                       ),
-                                                                      userRepo.currentUser.value.userId == videoRepo.homeCon.value.comments.elementAt(i).userId || userRepo.currentUser.value.userId == videoObj!.userId
+                                                                      userRepo.currentUser.value.userId == videoRepo.homeCon.value.comments.elementAt(i).userId ||
+                                                                              userRepo.currentUser.value.userId == videoObj!.userId
                                                                           ? Container(
                                                                               width: 50,
                                                                               child: Row(
@@ -1385,7 +1407,12 @@ class _DashboardViewState extends StateMVC<DashboardView> with SingleTickerProvi
                                                                                             if (int == 0) {
                                                                                               homeCon.value.onEditComment(i + 1, context);
                                                                                             } else {
-                                                                                              videoRepo.homeCon.value.showDeleteAlert(context, "Delete Confirmation", "Do you realy want to delete this comment", videoRepo.homeCon.value.comments.elementAt(i).commentId, videoObj!.videoId);
+                                                                                              videoRepo.homeCon.value.showDeleteAlert(
+                                                                                                  context,
+                                                                                                  "Delete Confirmation",
+                                                                                                  "Do you realy want to delete this comment",
+                                                                                                  videoRepo.homeCon.value.comments.elementAt(i).commentId,
+                                                                                                  videoObj!.videoId);
                                                                                             }
                                                                                           },
                                                                                           itemBuilder: (context) {
@@ -1668,7 +1695,8 @@ class _DashboardViewState extends StateMVC<DashboardView> with SingleTickerProvi
                                               child: Center(
                                                 child: Container(
                                                   color: settingRepo.setting.value.bgColor,
-                                                  child: VideoPlayerWidget(videoRepo.homeCon.value.videoController(index), video.videos.elementAt(index), videoRepo.homeCon.value.initializeVideoPlayerFutures[video.videos.elementAt(index).url]),
+                                                  child: VideoPlayerWidget(videoRepo.homeCon.value.videoController(index), video.videos.elementAt(index),
+                                                      videoRepo.homeCon.value.initializeVideoPlayerFutures[video.videos.elementAt(index).url]),
                                                 ),
                                               ),
                                             ),
@@ -1824,7 +1852,8 @@ class _DashboardViewState extends StateMVC<DashboardView> with SingleTickerProvi
                                                     child: Container(
                                                       color: Colors.black,
                                                       constraints: BoxConstraints(minWidth: 100, maxWidth: 500),
-                                                      child: VideoPlayerWidget(videoRepo.homeCon.value.videoController2(index), video.videos.elementAt(index), videoRepo.homeCon.value.initializeVideoPlayerFutures2[video.videos.elementAt(index).url]),
+                                                      child: VideoPlayerWidget(videoRepo.homeCon.value.videoController2(index), video.videos.elementAt(index),
+                                                          videoRepo.homeCon.value.initializeVideoPlayerFutures2[video.videos.elementAt(index).url]),
                                                     ),
                                                   ),
                                                   Stack(
@@ -2229,13 +2258,13 @@ class _DashboardViewState extends StateMVC<DashboardView> with SingleTickerProvi
                                         memCacheWidth: 50,
                                         errorWidget: (a, b, c) {
                                           return Image.asset(
-                                            "assets/images/splash.png",
+                                            "assets/images/video-logo.png",
                                             fit: BoxFit.cover,
                                           );
                                         },
                                       )
                                     : Image.asset(
-                                        "assets/images/splash.png",
+                                        "assets/images/video-logo.png",
                                         fit: BoxFit.cover,
                                       ),
                               ),

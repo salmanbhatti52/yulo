@@ -161,18 +161,21 @@ class UserProfileController extends ControllerMVC {
     profRepo.usersProfileData.notifyListeners();
     showLoader.value = true;
     showLoader.notifyListeners();
-    profRepo.update(profRepo.usersProfileData.value.toJson()).then((value) {
+    profRepo.update(profRepo.usersProfileData.value.toJson()).then((value) async {
       showLoader.value = false;
       showLoader.notifyListeners();
       var response = json.decode(value);
       if (response['status'] == 'success') {
+        await userRepo.setCurrentUser(response.body, true);
         Navigator.of(scaffoldKey.currentContext!).popAndPushNamed('/my-profile');
       } else {
         showLoader.value = false;
         showLoader.notifyListeners();
-        ScaffoldMessenger.of(GlobalVariable.navState.currentContext!).showSnackBar(SnackBar(
-          content: Text(response['msg']),
-        ));
+        ScaffoldMessenger.of(GlobalVariable.navState.currentContext!).showSnackBar(
+          SnackBar(
+            content: Text(response['msg']),
+          ),
+        );
       }
     }).catchError((e) {
       showLoader.value = false;
@@ -381,11 +384,13 @@ class UserProfileController extends ControllerMVC {
         userRepo.userProfile.notifyListeners();
         userRepo.blockedUsersData.value.users.removeWhere((element) => element.id == userId);
         userRepo.blockedUsersData.notifyListeners();
-        blockedUserScaffoldKey.currentState!.showSnackBar(SnackBar(
+        // blockedUserScaffoldKey.currentState!.showSnackBar(SnackBar(
+        ScaffoldMessenger.of(GlobalVariable.navState.currentContext!).showSnackBar(SnackBar(
           content: Text(response['msg']),
         ));
       } else {
-        blockedUserScaffoldKey.currentState!.showSnackBar(SnackBar(
+        // blockedUserScaffoldKey.currentState!.showSnackBar(SnackBar(
+        ScaffoldMessenger.of(GlobalVariable.navState.currentContext!).showSnackBar(SnackBar(
           content: Text("There are some error"),
         ));
       }

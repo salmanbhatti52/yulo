@@ -230,7 +230,9 @@ class VideoRecorderController extends ControllerMVC {
       await cameraController.initialize();
       await Future.wait([
         // The exposure mode is currently not supported on the web.
-        ...(!kIsWeb ? [cameraController.getMinExposureOffset().then((value) => minAvailableExposureOffset = value), cameraController.getMaxExposureOffset().then((value) => maxAvailableExposureOffset = value)] : []),
+        ...(!kIsWeb
+            ? [cameraController.getMinExposureOffset().then((value) => minAvailableExposureOffset = value), cameraController.getMaxExposureOffset().then((value) => maxAvailableExposureOffset = value)]
+            : []),
         cameraController.getMaxZoomLevel().then((value) => maxAvailableZoom = value),
         cameraController.getMinZoomLevel().then((value) => minAvailableZoom = value),
       ]);
@@ -410,7 +412,7 @@ class VideoRecorderController extends ControllerMVC {
           Navigator.of(scaffoldKey.currentContext!).popAndPushNamed('/my-profile');
         } else {
           var msg = response.data['msg'];
-          scaffoldKey.currentState!.showSnackBar(
+          ScaffoldMessenger.of(scaffoldKey.currentContext!).showSnackBar(
             Helper.toast(msg, Colors.red),
           );
         }
@@ -420,7 +422,7 @@ class VideoRecorderController extends ControllerMVC {
       });
     } catch (e) {
       var msg = e.toString();
-      scaffoldKey.currentState!.showSnackBar(
+      ScaffoldMessenger.of(scaffoldKey.currentContext!).showSnackBar(
         Helper.toast(msg, Colors.red),
       );
       setState(() {
@@ -526,7 +528,7 @@ class VideoRecorderController extends ControllerMVC {
       dialogBackgroundColor: settingRepo.setting.value.buttonColor,
       context: GlobalVariable.navState.currentContext!,
       animType: AnimType.SCALE,
-      dialogType: DialogType.QUESTION,
+      dialogType: DialogType.question,
       body: Column(
         children: <Widget>[
           "Do you really want to discard "
@@ -755,10 +757,10 @@ class VideoRecorderController extends ControllerMVC {
           print("_outputVideoController.value.duration.inSeconds");
           print(_outputVideoController.value.duration.inSeconds);
           print(videoRepo.selectedVideoLength.value.toInt());
-          if (_outputVideoController.value.duration.inSeconds <= videoRepo.selectedVideoLength.value.toInt()) {
-            String comm = '-i ${file.path} -vf "scale=' + "'min(720,iw)'" + ':-2" -c:v libx264  -preset ultrafast -crf 33 $outputVideo';
+          /*if (_outputVideoController.value.duration.inSeconds <= videoRepo.selectedVideoLength.value.toInt()) {
+            String comm = '-i ${file.path} -vf "scale=' + "'min(560,iw)'" + ':-2" -c:v libx264  -preset ultrafast -crf 23  $outputVideo';
             FFmpegKit.executeAsync(
-              // '-y -i $videoPath $audioFile  -filter_complex "$mergeAudioArgs[0:v]scale=720:-2$watermarkArgs" -c:v libx264 $mergeAudioArgs2 $audioFileArgs -preset ultrafast -crf 33  $outputVideo',
+              // '-y -i $videoPath $audioFile  -filter_complex "$mergeAudioArgs[0:v]scale=560:-2$watermarkArgs" -c:v libx264 $mergeAudioArgs2 $audioFileArgs -preset ultrafast -crf 23  $outputVideo',
               '-y $comm',
               (session) async {
                 EasyLoading.dismiss(animation: true);
@@ -809,18 +811,18 @@ class VideoRecorderController extends ControllerMVC {
                 }
               },
             );
-          } else {
-            _outputVideoController.dispose();
-            videoRepo.outputVideoPath.value = file.path;
-            videoRepo.outputVideoPath.notifyListeners();
-            Navigator.of(scaffoldKey.currentContext!).pushReplacement(
-              MaterialPageRoute(
-                builder: (context) {
-                  return VideoEditor(file: file);
-                },
-              ),
-            );
-          }
+          } else {*/
+          _outputVideoController.dispose();
+          videoRepo.outputVideoPath.value = file.path;
+          videoRepo.outputVideoPath.notifyListeners();
+          Navigator.of(scaffoldKey.currentContext!).pushReplacement(
+            MaterialPageRoute(
+              builder: (context) {
+                return VideoEditor(file: file);
+              },
+            ),
+          );
+          // }
         }
       });
     }
@@ -1050,7 +1052,8 @@ class VideoRecorderController extends ControllerMVC {
 
     try {
       await controller!.startVideoRecording();
-      endShift.value = DateTime.now().add(Duration(milliseconds: videoRepo.selectedVideoLength.value.toInt() * 1000 + int.parse((videoRepo.selectedVideoLength.value.toInt() / 15).toStringAsFixed(0)) * 104));
+      endShift.value =
+          DateTime.now().add(Duration(milliseconds: videoRepo.selectedVideoLength.value.toInt() * 1000 + int.parse((videoRepo.selectedVideoLength.value.toInt() / 15).toStringAsFixed(0)) * 104));
       endShift.notifyListeners();
     } on CameraException catch (e) {
       showCameraException(e, context);
@@ -1141,14 +1144,14 @@ class VideoRecorderController extends ControllerMVC {
       audioFile = " -i $audioFile";
       presetString = '-preset ultrafast -crf 28';
       mergeAudioArgs2 = "-map 0:v:0 -map 1:a:0";
-      audioFileArgs = '-c:a aac -ac 2 -ar 22050 -shortest';
+      audioFileArgs = '-c:a aac -ac 2 -ar 22050 -shortest -b:a 64k';
     }
     try {
-      print('ffmpeg -i $videoPath $watermark $audioFile  -filter_complex "$mergeAudioArgs[0:v]scale=720:-2$watermarkArgs" -c libx265  $mergeAudioArgs2 $audioFileArgs  $presetString $outputVideo');
+      print('ffmpeg -i $videoPath $watermark $audioFile  -filter_complex "$mergeAudioArgs[0:v]scale=560:-2$watermarkArgs" -c libx265  $mergeAudioArgs2 $audioFileArgs  $presetString $outputVideo');
 
       FFmpegKit.executeAsync(
-          // '-y -i $videoPath $audioFile  -filter_complex "$mergeAudioArgs[0:v]scale=720:-2$watermarkArgs" -c:v libx264 $mergeAudioArgs2 $audioFileArgs -preset ultrafast -crf 33  $outputVideo',
-          '-y -i $videoPath $audioFile  -filter_complex "$mergeAudioArgs[0:v]scale=720:-2$watermarkArgs" -c:v libx264 $mergeAudioArgs2 $audioFileArgs -preset ultrafast $outputVideo',
+          // '-y -i $videoPath $audioFile  -filter_complex "$mergeAudioArgs[0:v]scale=560:-2$watermarkArgs" -c:v libx264 $mergeAudioArgs2 $audioFileArgs -preset ultrafast -crf 23  $outputVideo',
+          '-y -i $videoPath $audioFile  -filter_complex "$mergeAudioArgs[0:v]scale=560:-2$watermarkArgs" -c:v libx264 $mergeAudioArgs2 $audioFileArgs -preset ultrafast  $outputVideo',
           (session) async {
             EasyLoading.dismiss(animation: true);
             print("FFmpegKit.executeAsync in Command");
@@ -1276,7 +1279,27 @@ class VideoRecorderController extends ControllerMVC {
     return outputVideo;
   }
 
-  final fonts = ['Alegreya', 'B612', 'TitilliumWeb', 'Varela', 'Vollkorn', 'Rakkas', 'ConcertOne', 'YatraOne', 'OldStandardTT', 'Neonderthaw', 'DancingScript', 'SedgwickAve', 'IndieFlower', 'Sacramento', 'PressStart2P', 'FrederickatheGreat', 'ReenieBeanie', 'BungeeShade', 'UnifrakturMaguntia'];
+  final fonts = [
+    'Alegreya',
+    'B612',
+    'TitilliumWeb',
+    'Varela',
+    'Vollkorn',
+    'Rakkas',
+    'ConcertOne',
+    'YatraOne',
+    'OldStandardTT',
+    'Neonderthaw',
+    'DancingScript',
+    'SedgwickAve',
+    'IndieFlower',
+    'Sacramento',
+    'PressStart2P',
+    'FrederickatheGreat',
+    'ReenieBeanie',
+    'BungeeShade',
+    'UnifrakturMaguntia'
+  ];
 
   startTimer(BuildContext context) {
     timer = Timer.periodic(new Duration(milliseconds: 100), (timer) {
@@ -1374,7 +1397,7 @@ class VideoRecorderController extends ControllerMVC {
               watermarkArgs = "[1][0]scale2ref=w='iw*25/100':h='ow/mdar'[wm][vid];[vid][wm]overlay=W-w-25:25";
               // watermarkArgs = "overlay=W-w-5:5";
               FFmpegKit.executeAsync(
-                  '-y -i ${videoRepo.outputVideoPath.value} $watermark -filter_complex "$watermarkArgs" -preset ultrafast -crf 33  $outputVideo',
+                  '-y -i ${videoRepo.outputVideoPath.value} $watermark -filter_complex "$watermarkArgs" -preset ultrafast -crf 23  $outputVideo',
                   (session) async {
                     print("FFmpegKit.executeAsync in Command");
                     // Unique session id created for this execution
@@ -1504,8 +1527,8 @@ class VideoRecorderController extends ControllerMVC {
         } else {
           print("Text Filter done");
           FFmpegKit.executeAsync(
-              // '-y -i ${videoRepo.outputVideoPath.value} $textFilter $watermark -filter_complex "$textFilterArgs$watermarkArgs" -map "[final]" -map 0:a -preset ultrafast -crf 33  $outputVideo',
-              '-y -i ${videoRepo.outputVideoPath.value} $textFilter $watermark -filter_complex "$textFilterArgs$watermarkArgs" -map "$mapVar" -map 0:a -preset ultrafast -crf 33  $outputVideo',
+              // '-y -i ${videoRepo.outputVideoPath.value} $textFilter $watermark -filter_complex "$textFilterArgs$watermarkArgs" -map "[final]" -map 0:a -preset ultrafast -crf 23  $outputVideo',
+              '-y -i ${videoRepo.outputVideoPath.value} $textFilter $watermark -filter_complex "$textFilterArgs$watermarkArgs" -map "$mapVar" -map 0:a -preset ultrafast -crf 23  $outputVideo',
               (session) async {
                 print("FFmpegKit.executeAsync in Command");
                 // Unique session id created for this execution
@@ -1742,9 +1765,15 @@ class VideoRecorderController extends ControllerMVC {
         if (_firstStat) {
           _firstStat = false;
         } else {
-          String stats = "Exporting video ${((statics.getTime() / videoEditorController!.video.value.duration.inMilliseconds) * 100).ceil()}%";
+          int totalMillis = 0;
+          if (videoEditorController!.video.value.duration.inMilliseconds <= videoRepo.selectedVideoLength.value * 1000) {
+            totalMillis = videoEditorController!.video.value.duration.inMilliseconds;
+          } else {
+            totalMillis = (videoRepo.selectedVideoLength.value * 1000).toInt();
+          }
+          String stats = "Exporting video ${((statics.getTime() / totalMillis) * 100).ceil()}%";
           EasyLoading.showProgress(
-            ((statics.getTime() / videoEditorController!.video.value.duration.inMilliseconds)),
+            ((statics.getTime() / totalMillis)),
             status: stats,
             maskType: EasyLoadingMaskType.black,
           );
@@ -1816,6 +1845,68 @@ class VideoRecorderController extends ControllerMVC {
             ),
           ),
         );
+      },
+    );
+  }
+
+  trimVideoToMaxLength(String dataSource) async {
+    Directory appDirectory;
+    if (!Platform.isAndroid) {
+      appDirectory = await getApplicationDocumentsDirectory();
+      print(appDirectory);
+    } else {
+      appDirectory = (await getExternalStorageDirectory())!;
+    }
+    final String outputDirectory = '${appDirectory.path}/outputVideos';
+    await Directory(outputDirectory).create(recursive: true);
+    final String currentTime = DateTime.now().millisecondsSinceEpoch.toString();
+    final String thumbImg = '$outputDirectory/${currentTime}.jpg';
+    final String outputVideo = '$outputDirectory/${currentTime}.mp4';
+    File file = File(dataSource);
+    String finalDuration = Helper.getDurationString(Duration(seconds: videoRepo.selectedVideoLength.value.toInt()));
+    String comm = '-i ${file.path} -ss 00:00:00 -to $finalDuration -vf "scale=' + "'min(560,iw)'" + ':-2" -c:v libx264  -preset ultrafast -crf 23  $outputVideo';
+    FFmpegKit.executeAsync(
+      // '-y -i $videoPath $audioFile  -filter_complex "$mergeAudioArgs[0:v]scale=560:-2$watermarkArgs" -c:v libx264 $mergeAudioArgs2 $audioFileArgs -preset ultrafast -crf 23  $outputVideo',
+      '-y $comm',
+      (session) async {
+        EasyLoading.dismiss(animation: true);
+        print("FFmpegKit.executeAsync in Command");
+
+        // Unique session id created for this execution
+        final sessionId = session.getSessionId();
+        print("FFmpegKit.executeAsync sessionId $sessionId");
+        // Command arguments as a single string
+        final command = session.getCommand();
+        print("ffmpeg command $command");
+
+        // The list of logs generated for this execution
+        final logs = await session.getLogs();
+        print("ffmpegLogs $logs");
+        logs.forEach((element) {
+          print("::");
+          print(element.getMessage());
+        });
+
+        // The list of statistics generated for this execution (only available on FFmpegSession)
+        final statistics = await (session as FFmpegSession).getStatistics();
+
+        videoPath = outputVideo;
+        videoRepo.outputVideoPath.value = outputVideo;
+        videoRepo.outputVideoPath.notifyListeners();
+      },
+      null,
+      (statics) {
+        // First statistics is always wrong so if first one skip it
+        if (_firstStat) {
+          _firstStat = false;
+        } else {
+          String stats = "Trimming Video ${((statics.getTime() / videoRepo.selectedVideoLength.value * 1000) * 100).ceil()}%";
+          EasyLoading.showProgress(
+            ((statics.getTime() / videoRepo.selectedVideoLength.value * 1000)),
+            status: stats,
+            maskType: EasyLoadingMaskType.black,
+          );
+        }
       },
     );
   }

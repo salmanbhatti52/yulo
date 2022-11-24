@@ -246,14 +246,12 @@ class SplashScreenController extends ControllerMVC {
     timer = Timer.periodic(Duration(milliseconds: 200), (_) {
       print('Percent Update');
       WidgetsBinding.instance.addPostFrameCallback((_) async {
-        setState(() {
-          loadingPercent.value += 1;
-          if (loadingPercent.value >= 100) {
-            timer.cancel();
-            // percent=0;
-          }
-          loadingPercent.notifyListeners();
-        });
+        loadingPercent.value += 1;
+        if (loadingPercent.value >= 100) {
+          timer.cancel();
+          // percent=0;
+        }
+        loadingPercent.notifyListeners();
       });
     });
     // }

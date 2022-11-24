@@ -138,7 +138,7 @@ class _VideoDescriptionState extends StateMVC<VideoDescription> {
                               : ClipRRect(
                                   borderRadius: BorderRadius.circular(50.0),
                                   child: Image.asset(
-                                    "assets/images/splash.png",
+                                    "assets/images/video-logo.png",
                                     height: 40.0,
                                     width: 40.0,
                                     fit: BoxFit.fitWidth,
@@ -231,14 +231,19 @@ class _VideoDescriptionState extends StateMVC<VideoDescription> {
                                                     onTap: () async {
                                                       if (userRepo.currentUser.value.token != "") {
                                                         if (videoRepo.homeCon.value.showFollowingPage.value) {
-                                                          if (videoRepo.followingUsersVideoData.value.videos.elementAt(videoRepo.homeCon.value.showFollowingPage.value ? videoRepo.homeCon.value.swiperIndex2 : videoRepo.homeCon.value.swiperIndex).isFollowing == 0) {
+                                                          if (videoRepo.followingUsersVideoData.value.videos
+                                                                  .elementAt(
+                                                                      videoRepo.homeCon.value.showFollowingPage.value ? videoRepo.homeCon.value.swiperIndex2 : videoRepo.homeCon.value.swiperIndex)
+                                                                  .isFollowing ==
+                                                              0) {
                                                             videoRepo.followingUsersVideoData.value.videos.elementAt(videoRepo.homeCon.value.swiperIndex2).totalFollowers++;
                                                           } else {
                                                             videoRepo.followingUsersVideoData.value.videos.elementAt(videoRepo.homeCon.value.swiperIndex2).totalFollowers--;
                                                           }
                                                           videoRepo.followingUsersVideoData.notifyListeners();
                                                         } else {
-                                                          print("videoRepo.videosData.value.videos.elementAt(videoRepo.homeCon.value.swiperIndex).isFollowing ${videoRepo.videosData.value.videos.elementAt(videoRepo.homeCon.value.swiperIndex).isFollowing}");
+                                                          print(
+                                                              "videoRepo.videosData.value.videos.elementAt(videoRepo.homeCon.value.swiperIndex).isFollowing ${videoRepo.videosData.value.videos.elementAt(videoRepo.homeCon.value.swiperIndex).isFollowing}");
                                                           if (videoRepo.videosData.value.videos.elementAt(videoRepo.homeCon.value.swiperIndex).isFollowing == 0) {
                                                             videoRepo.videosData.value.videos.elementAt(videoRepo.homeCon.value.swiperIndex).isFollowing = 1;
                                                             videoRepo.videosData.value.videos.elementAt(videoRepo.homeCon.value.swiperIndex).totalFollowers++;
@@ -276,7 +281,14 @@ class _VideoDescriptionState extends StateMVC<VideoDescription> {
                                                         child: (!showFollowLoading)
                                                             ? videoRepo.homeCon.value.showFollowingPage.value
                                                                 ? Text(
-                                                                    (videoRepo.followingUsersVideoData.value.videos.elementAt(videoRepo.homeCon.value.showFollowingPage.value ? videoRepo.homeCon.value.swiperIndex2 : videoRepo.homeCon.value.swiperIndex).isFollowing == 0) ? "Follow" : "Unfollow",
+                                                                    (videoRepo.followingUsersVideoData.value.videos
+                                                                                .elementAt(videoRepo.homeCon.value.showFollowingPage.value
+                                                                                    ? videoRepo.homeCon.value.swiperIndex2
+                                                                                    : videoRepo.homeCon.value.swiperIndex)
+                                                                                .isFollowing ==
+                                                                            0)
+                                                                        ? "Follow"
+                                                                        : "Unfollow",
                                                                     style: TextStyle(
                                                                       color: settingRepo.setting.value.buttonTextColor,
                                                                       fontWeight: FontWeight.normal,
@@ -284,7 +296,14 @@ class _VideoDescriptionState extends StateMVC<VideoDescription> {
                                                                     ),
                                                                   )
                                                                 : Text(
-                                                                    (videoRepo.videosData.value.videos.elementAt(videoRepo.homeCon.value.showFollowingPage.value ? videoRepo.homeCon.value.swiperIndex2 : videoRepo.homeCon.value.swiperIndex).isFollowing == 0) ? "Follow" : "Unfollow",
+                                                                    (videoRepo.videosData.value.videos
+                                                                                .elementAt(videoRepo.homeCon.value.showFollowingPage.value
+                                                                                    ? videoRepo.homeCon.value.swiperIndex2
+                                                                                    : videoRepo.homeCon.value.swiperIndex)
+                                                                                .isFollowing ==
+                                                                            0)
+                                                                        ? "Follow"
+                                                                        : "Unfollow",
                                                                     style: TextStyle(
                                                                       color: settingRepo.setting.value.buttonTextColor,
                                                                       fontWeight: FontWeight.normal,
@@ -345,8 +364,9 @@ class _VideoDescriptionState extends StateMVC<VideoDescription> {
                           },
                           child: Container(
                             constraints: BoxConstraints(
-                              maxHeight:
-                                  (App(context).appHeight(heightPercent) + MediaQuery.of(context).padding.bottom + videoRepo.homeCon.value.paddingBottom) - 130 > 0 ? (App(context).appHeight(heightPercent) + MediaQuery.of(context).padding.bottom + videoRepo.homeCon.value.paddingBottom) - 130 : 35,
+                              maxHeight: (App(context).appHeight(heightPercent) + MediaQuery.of(context).padding.bottom + videoRepo.homeCon.value.paddingBottom) - 130 > 0
+                                  ? (App(context).appHeight(heightPercent) + MediaQuery.of(context).padding.bottom + videoRepo.homeCon.value.paddingBottom) - 130
+                                  : 35,
                             ),
                             child: new SingleChildScrollView(
                                 scrollDirection: Axis.vertical, //.horizontal
@@ -439,5 +459,6 @@ class _VideoDescriptionState extends StateMVC<VideoDescription> {
     );
   }
 
-  LinearGradient get musicGradient => LinearGradient(colors: [Colors.grey[800]!, Colors.grey[900]!, Colors.grey[900]!, Colors.grey[800]!], stops: [0.0, 0.4, 0.6, 1.0], begin: Alignment.bottomLeft, end: Alignment.topRight);
+  LinearGradient get musicGradient =>
+      LinearGradient(colors: [Colors.grey[800]!, Colors.grey[900]!, Colors.grey[900]!, Colors.grey[800]!], stops: [0.0, 0.4, 0.6, 1.0], begin: Alignment.bottomLeft, end: Alignment.topRight);
 }

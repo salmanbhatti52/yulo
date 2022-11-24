@@ -296,12 +296,19 @@ class _VideoEditorState extends StateMVC<VideoEditor> {
                 child: "Done".text.color(Colors.white).make().centered(),
               ),
             ),
-            _con.videoEditorController!.video.value.duration.inSeconds <= videoRepo.selectedVideoLength.value
-                ? Expanded(
+            /*_con.videoEditorController!.video.value.duration.inSeconds <= videoRepo.selectedVideoLength.value
+                ? */Expanded(
                     child: InkWell(
-                      onTap: () {
+                      onTap: () async{
                         print("_con.videoEditorController.video.dataSource ${_con.videoEditorController!.video.dataSource}");
-                        _con.previewVideoController = VideoPlayerController.file(File(_con.videoEditorController!.video.dataSource));
+                        String filePath ="";
+                        if(_con.videoEditorController!.video.value.duration.inSeconds >= videoRepo.selectedVideoLength.value){
+                          await _con.trimVideoToMaxLength(_con.videoEditorController!.video.dataSource);
+                          filePath = videoRepo.outputVideoPath.value;
+                        }else{
+                          filePath = _con.videoEditorController!.video.dataSource;
+                        }
+                        _con.previewVideoController = VideoPlayerController.file(File(filePath));
                         _con.previewVideoController!.initialize().then((value) async {
                           setState(() {});
                           _con.previewVideoController!.play();
@@ -316,7 +323,7 @@ class _VideoEditorState extends StateMVC<VideoEditor> {
                       child: "Skip".text.color(Colors.white).make().centered(),
                     ),
                   )
-                : Container(),
+                /*: Container()*/,
           ],
         ),
       ),

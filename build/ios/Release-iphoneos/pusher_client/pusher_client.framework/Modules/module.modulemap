@@ -1,0 +1,11 @@
+framework module pusher_client {
+  umbrella header "pusher_client-umbrella.h"
+
+  export *
+  module * { export * }
+}
+
+module pusher_client.Swift {
+  header "pusher_client-Swift.h"
+  requires objc
+}

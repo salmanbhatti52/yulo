@@ -26,6 +26,7 @@ import '../helpers/global_keys.dart';
 import '../helpers/helper.dart';
 import '../models/gender.dart';
 import '../models/login_model.dart';
+import '../models/user_profile_model.dart';
 import '../models/videos_model.dart';
 import '../repositories/hash_repository.dart' as hashRepo;
 import '../repositories/login_page_repository.dart' as loginRepo;
@@ -468,7 +469,8 @@ class UserController extends ControllerMVC {
         final AccessToken accessToken = fBResult.accessToken!;
         // OverlayEntry loader = Helper.overlayLoader(GlobalVariable.navState.currentContext);
         // Overlay.of(GlobalVariable.navState.currentContext).insert(loader);
-        final graphResponse = await http.get(Uri.parse('https://graph.facebook.com/v2.12/me?fields=name,email,first_name,last_name,picture.width(720).height(720),birthday,gender,languages,location{location}&access_token=${accessToken.token}'));
+        final graphResponse = await http.get(Uri.parse(
+            'https://graph.facebook.com/v2.12/me?fields=name,email,first_name,last_name,picture.width(720).height(720),birthday,gender,languages,location{location}&access_token=${accessToken.token}'));
         final profile = jsonDecode(graphResponse.body);
         userRepo.socialLogin(profile, timezone, 'FB').then((value) async {
           if (value != null) {
@@ -634,26 +636,29 @@ class UserController extends ControllerMVC {
     print("getUsersProfile page $page");
     homeCon = videoRepo.homeCon.value;
     if (page == 1) {
+      scrollController1 = new ScrollController();
+
       showLoader.value = true;
       showLoader.notifyListeners();
     }
-
-    scrollController1 = new ScrollController();
-    userRepo.getUserProfile(userId, page).then((userValue) {
-      showLoader.value = false;
-      showLoader.notifyListeners();
-      if (userValue.userVideos.length == userValue.totalVideos) {
-        showLoadMore = false;
-      }
-      scrollController1.addListener(() {
+    bool stillFetching = true;
+    UserProfileModel userValue = await userRepo.getUserProfile(userId, page);
+    stillFetching = false;
+    showLoader.value = false;
+    showLoader.notifyListeners();
+    if (userValue.userVideos.length == userValue.totalVideos) {
+      showLoadMore = false;
+    }
+    if (page == 1) {
+      scrollController1.addListener(() async {
         if (scrollController1.position.pixels == scrollController1.position.maxScrollExtent) {
-          if (userValue.userVideos.length != userValue.totalVideos && showLoadMore) {
+          if (userValue.userVideos.length != userValue.totalVideos && showLoadMore && !stillFetching) {
             page = page + 1;
-            getUsersProfile(userId, page);
+            await getUsersProfile(userId, page);
           }
         }
       });
-    });
+    }
   }
 
   launchURL(url) async {
@@ -665,6 +670,7 @@ class UserController extends ControllerMVC {
   }
 
   Future getMyProfile(page, [bool showLoaderOp = true]) async {
+    print("getMyProfile $page");
     homeCon = videoRepo.homeCon.value;
     if (showLoaderOp) {
       EasyLoading.show(
@@ -673,22 +679,28 @@ class UserController extends ControllerMVC {
       );
     }
     videosLoader = true;
-    scrollController1 = new ScrollController();
-    userRepo.getMyProfile(page).then((userValue) {
-      EasyLoading.dismiss();
-      videosLoader = false;
-      if (userValue.userVideos.length == userValue.totalVideos) {
-        showLoadMore = false;
-      }
+    if (page == 1) {
+      scrollController1 = new ScrollController();
+    }
+    bool stillFetching = true;
+    UserProfileModel userValue = await userRepo.getMyProfile(page);
+    stillFetching = false;
+    EasyLoading.dismiss();
+    videosLoader = false;
+    print("${userValue.userVideos.length} == ${userValue.totalVideos}");
+    if (userValue.userVideos.length == userValue.totalVideos) {
+      showLoadMore = false;
+    }
+    if (page == 1) {
       scrollController1.addListener(() {
         if (scrollController1.position.pixels == scrollController1.position.maxScrollExtent) {
-          if (userValue.userVideos.length != userValue.totalVideos && showLoadMore) {
+          if (userValue.userVideos.length != userValue.totalVideos && showLoadMore && !stillFetching) {
             page = page + 1;
             getMyProfile(page);
           }
         }
       });
-    });
+    }
   }
 
   Future getLikedVideos(page) async {
@@ -806,7 +818,6 @@ class UserController extends ControllerMVC {
     if (completeProfileFormKey.currentState!.validate()) {
       showLoader.value = true;
       showLoader.notifyListeners();
-
       List name = fullName.split(' ');
       String fname = name[0];
       String lname = "";
@@ -1255,26 +1266,27 @@ class UserController extends ControllerMVC {
         maxHeight: 1000, // <- reduce the image size
         maxWidth: 1000,
       );
-      setState(() {
-        if (pickedFile != null) {
-          selectedDp = File(pickedFile.path);
-        } else {
-          print('No image selected.');
-        }
-      });
+
+      if (pickedFile != null) {
+        selectedDp = File(pickedFile.path);
+      } else {
+        print('No image selected.');
+      }
     } else {
       final pickedFile = await picker.pickImage(
         source: ImageSource.gallery,
         imageQuality: 100,
       );
-      setState(() {
-        if (pickedFile != null) {
-          selectedDp = File(pickedFile.path);
-        } else {
-          print('No image selected.');
-        }
-      });
+      // setState(() {
+      if (pickedFile != null) {
+        selectedDp = File(pickedFile.path);
+      } else {
+        print('No image selected.');
+      }
+      // });
     }
+    reload.value = true;
+    reload.notifyListeners();
   }
 
   sendPasswordResetOTP() async {

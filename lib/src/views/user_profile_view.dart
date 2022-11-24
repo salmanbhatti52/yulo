@@ -137,53 +137,58 @@ class _UsersProfileViewState extends StateMVC<UsersProfileView> {
                                               children: [
                                                 GestureDetector(
                                                   onTap: () {
-                                                    Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-                                                      return Scaffold(
-                                                          backgroundColor: settingRepo.setting.value.bgColor,
-                                                          appBar: PreferredSize(
-                                                            preferredSize: Size.fromHeight(45.0),
-                                                            child: AppBar(
-                                                              leading: InkWell(
-                                                                onTap: () {
-                                                                  Navigator.of(context).pop();
-                                                                },
-                                                                child: Icon(
-                                                                  Icons.arrow_back,
-                                                                  size: 20,
-                                                                  color: settingRepo.setting.value.iconColor,
+                                                    Navigator.of(context).push(
+                                                      MaterialPageRoute(
+                                                        builder: (context) {
+                                                          return Scaffold(
+                                                            backgroundColor: settingRepo.setting.value.bgColor,
+                                                            appBar: PreferredSize(
+                                                              preferredSize: Size.fromHeight(45.0),
+                                                              child: AppBar(
+                                                                leading: InkWell(
+                                                                  onTap: () {
+                                                                    Navigator.of(context).pop();
+                                                                  },
+                                                                  child: Icon(
+                                                                    Icons.arrow_back,
+                                                                    size: 20,
+                                                                    color: settingRepo.setting.value.iconColor,
+                                                                  ),
                                                                 ),
-                                                              ),
-                                                              iconTheme: IconThemeData(
-                                                                color: settingRepo.setting.value.textColor, //change your color here
-                                                              ),
-                                                              // backgroundColor: Color(0xff15161a),
-                                                              backgroundColor: settingRepo.setting.value.bgColor,
-                                                              title: Text(
-                                                                "PROFILE PICTURE",
-                                                                style: TextStyle(
-                                                                  fontSize: 18.0,
-                                                                  fontWeight: FontWeight.w400,
-                                                                  color: settingRepo.setting.value.textColor,
+                                                                iconTheme: IconThemeData(
+                                                                  color: settingRepo.setting.value.textColor, //change your color here
                                                                 ),
+                                                                // backgroundColor: Color(0xff15161a),
+                                                                backgroundColor: settingRepo.setting.value.bgColor,
+                                                                title: Text(
+                                                                  "PROFILE PICTURE",
+                                                                  style: TextStyle(
+                                                                    fontSize: 18.0,
+                                                                    fontWeight: FontWeight.w400,
+                                                                    color: settingRepo.setting.value.textColor,
+                                                                  ),
+                                                                ),
+                                                                centerTitle: true,
                                                               ),
-                                                              centerTitle: true,
                                                             ),
-                                                          ),
-                                                          body: Center(
-                                                            child: PhotoView(
-                                                              enableRotation: true,
-                                                              imageProvider: CachedNetworkImageProvider((_userProfile.largeProfilePic.toLowerCase().contains(".jpg") ||
-                                                                      _userProfile.largeProfilePic.toLowerCase().contains(".jpeg") ||
-                                                                      _userProfile.largeProfilePic.toLowerCase().contains(".png") ||
-                                                                      _userProfile.largeProfilePic.toLowerCase().contains(".gif") ||
-                                                                      _userProfile.largeProfilePic.toLowerCase().contains(".bmp") ||
-                                                                      _userProfile.largeProfilePic.toLowerCase().contains("fbsbx.com") ||
-                                                                      _userProfile.largeProfilePic.toLowerCase().contains("googleusercontent.com"))
-                                                                  ? _userProfile.largeProfilePic
-                                                                  : '${GlobalConfiguration().get('base_url')}' + "default/user-dummy-pic.png"),
+                                                            body: Center(
+                                                              child: PhotoView(
+                                                                enableRotation: true,
+                                                                imageProvider: CachedNetworkImageProvider((_userProfile.largeProfilePic.toLowerCase().contains(".jpg") ||
+                                                                        _userProfile.largeProfilePic.toLowerCase().contains(".jpeg") ||
+                                                                        _userProfile.largeProfilePic.toLowerCase().contains(".png") ||
+                                                                        _userProfile.largeProfilePic.toLowerCase().contains(".gif") ||
+                                                                        _userProfile.largeProfilePic.toLowerCase().contains(".bmp") ||
+                                                                        _userProfile.largeProfilePic.toLowerCase().contains("fbsbx.com") ||
+                                                                        _userProfile.largeProfilePic.toLowerCase().contains("googleusercontent.com"))
+                                                                    ? _userProfile.largeProfilePic
+                                                                    : '${GlobalConfiguration().get('base_url')}' + "default/user-dummy-pic.png"),
+                                                              ),
                                                             ),
-                                                          ));
-                                                    }));
+                                                          );
+                                                        },
+                                                      ),
+                                                    );
                                                   },
                                                   child: Container(
                                                     height: config.App(context).appWidth(38),

@@ -401,7 +401,7 @@ class VideoEditorController extends ChangeNotifier {
     final String trim = minTrim >= _min.dx && maxTrim <= _max.dx ? "-ss $_trimStart -to $_trimEnd" : "";
     final String crop = minCrop >= _min && maxCrop <= _max ? await _getCrop() : "";
     final String rotation = _rotation >= 360 || _rotation <= 0 ? "" : _getRotation();
-    final String scaleInstruction = scale == 1.0 ? (_video.value.size.height > 720 ? "scale=720:-2" : "") : "scale=iw*$scale:ih*$scale";
+    final String scaleInstruction = scale == 1.0 ? (_video.value.size.height > 560 ? "scale=560:-2" : "") : "scale=iw*$scale:ih*$scale";
 
     //----------------//
     //VALIDATE FILTERS//

@@ -6,7 +6,6 @@ import 'package:http/http.dart' as http;
 
 import '../helpers/helper.dart';
 import '../models/edit_profile_model.dart';
-import '../repositories/user_repository.dart' as userRepo;
 import 'user_repository.dart';
 
 ValueNotifier<EditProfileModel> usersProfileData = new ValueNotifier(EditProfileModel());
@@ -88,8 +87,8 @@ Future<String> update(data) async {
     headers: headers,
     body: json.encode(data),
   );
-  if (response.statusCode == 200 && json.decode(response.body)['status'] == 'success') {
-    await userRepo.setCurrentUser(response.body, true);
+  print("resposen ${response.body}");
+  if (response.statusCode == 200) {
     return json.encode(json.decode(response.body));
   } else {
     throw new Exception(response.body);

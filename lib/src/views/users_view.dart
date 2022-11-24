@@ -285,9 +285,14 @@ class _UsersViewState extends StateMVC<UsersView> {
                                                   child: ButtonTheme(
                                                     minWidth: 80,
                                                     height: 25,
-                                                    child: RaisedButton(
-                                                      color: Colors.transparent,
-                                                      padding: EdgeInsets.all(0),
+                                                    child: ElevatedButton(
+                                                      style: ElevatedButton.styleFrom(
+                                                        backgroundColor: Colors.transparent,
+                                                        padding: EdgeInsets.all(0),
+                                                        // shape: RoundedRectangleBorder(
+                                                        //   borderRadius: BorderRadius.circular(100.0),
+                                                        // ),
+                                                      ),
                                                       child: Container(
                                                         height: 25,
                                                         width: 80,
